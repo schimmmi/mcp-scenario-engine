@@ -159,6 +159,62 @@ class DynamicRule:
         else:
             raise ValueError(f"Unknown value type: {val_type}")
 
+    def _compute_value(self, value_spec: dict[str, Any] | Any, state: SimulationState) -> float:
+        """
+        Compute value from formula specification.
+
+        Supports:
+        - Simple values: 42 or {"type": "value", "value": 42}
+        - State references: {"type": "resource", "name": "cpu"}
+        - Arithmetic: {"type": "add", "values": [...]}
+        - Complex formulas: nested operations
+        """
+        if not isinstance(value_spec, dict):
+            return float(value_spec)
+
+        val_type = value_spec.get("type")
+
+        # Simple value
+        if val_type == "value":
+            return float(value_spec["value"])
+
+        # State references
+        elif val_type == "resource":
+            return float(state.resources.get(value_spec["name"], 0.0))
+
+        elif val_type == "metric":
+            return float(state.metrics.get(value_spec["name"], 0.0))
+
+        elif val_type == "time":
+            return float(state.time)
+
+        # Arithmetic operations
+        elif val_type == "add":
+            values = [self._compute_value(v, state) for v in value_spec["values"]]
+            return sum(values)
+
+        elif val_type == "subtract":
+            left = self._compute_value(value_spec["left"], state)
+            right = self._compute_value(value_spec["right"], state)
+            return left - right
+
+        elif val_type == "multiply":
+            values = [self._compute_value(v, state) for v in value_spec["values"]]
+            result = 1.0
+            for v in values:
+                result *= v
+            return result
+
+        elif val_type == "divide":
+            numerator = self._compute_value(value_spec["numerator"], state)
+            denominator = self._compute_value(value_spec["denominator"], state)
+            if denominator == 0:
+                raise ValueError("Division by zero")
+            return numerator / denominator
+
+        else:
+            raise ValueError(f"Unknown value type: {val_type}")
+
     def _apply_action(
         self, action: dict[str, Any], state: SimulationState
     ) -> SimulationState:
@@ -184,78 +240,6 @@ class DynamicRule:
             key = action["key"]
             value = self._compute_value(action["value"], state)
             state.metadata[key] = value
-
-        else:
-            raise ValueError(f"Unknown action type: {action_type}")
-
-        return state
-
-    def _compute_value(self, value_spec: dict[str, Any] | Any, state: SimulationState) -> Any:
-        """Compute value (may be increment/decrement operation)."""
-        if not isinstance(value_spec, dict):
-            return value_spec
-
-        val_type = value_spec.get("type")
-
-        if val_type == "increment":
-            # Need to know which field to increment - get from action context
-            return value_spec["amount"]  # Will be added to current value
-
-        elif val_type == "value":
-            return value_spec["value"]
-
-        elif val_type == "multiply":
-            return value_spec["factor"]
-
-        else:
-            return value_spec
-
-    def _apply_action(
-        self, action: dict[str, Any], state: SimulationState
-    ) -> SimulationState:
-        """Apply a single action to state."""
-        action_type = action.get("type")
-
-        if action_type == "set_resource":
-            resource = action["resource"]
-            value_spec = action["value"]
-
-            if isinstance(value_spec, dict) and value_spec.get("type") == "increment":
-                current = state.resources.get(resource, 0.0)
-                state.resources[resource] = current + value_spec["amount"]
-            elif isinstance(value_spec, dict) and value_spec.get("type") == "multiply":
-                current = state.resources.get(resource, 0.0)
-                state.resources[resource] = current * value_spec["factor"]
-            else:
-                state.resources[resource] = float(value_spec)
-
-        elif action_type == "set_metric":
-            metric = action["metric"]
-            value_spec = action["value"]
-
-            if isinstance(value_spec, dict) and value_spec.get("type") == "increment":
-                current = state.metrics.get(metric, 0.0)
-                state.metrics[metric] = current + value_spec["amount"]
-            elif isinstance(value_spec, dict) and value_spec.get("type") == "multiply":
-                current = state.metrics.get(metric, 0.0)
-                state.metrics[metric] = current * value_spec["factor"]
-            else:
-                state.metrics[metric] = float(value_spec)
-
-        elif action_type == "set_flag":
-            flag = action["flag"]
-            value = action["value"]
-            state.flags[flag] = bool(value)
-
-        elif action_type == "set_metadata":
-            key = action["key"]
-            value_spec = action["value"]
-
-            if isinstance(value_spec, dict) and value_spec.get("type") == "increment":
-                current = state.metadata.get(key, 0)
-                state.metadata[key] = current + value_spec["amount"]
-            else:
-                state.metadata[key] = value_spec
 
         else:
             raise ValueError(f"Unknown action type: {action_type}")

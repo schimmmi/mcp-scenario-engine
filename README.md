@@ -41,7 +41,12 @@ The MCP Scenario Engine is a Model Context Protocol (MCP) server that provides a
 - Flexible conditions (comparison, and, or, not, always)
 - Value sources (resource, metric, flag, metadata, time, value)
 - Multiple action types (set_resource, set_metric, set_flag, set_metadata)
-- Value operations (fixed, increment, multiply)
+- **Complex formulas** with arithmetic operations:
+  - Addition: `{"type": "add", "values": [...]}`
+  - Subtraction: `{"type": "subtract", "left": ..., "right": ...}`
+  - Multiplication: `{"type": "multiply", "values": [...]}`
+  - Division: `{"type": "divide", "numerator": ..., "denominator": ...}`
+  - Nested operations for complex calculations
 - Priority system for rule execution order
 - Full rule management (CRUD operations)
 
@@ -465,6 +470,32 @@ python examples/demo_persistence.py
    • Get metadata without loading
    • Delete simulations
    • Overwrite existing saves
+```
+
+### Demo: Weight Loss Simulation (Complex Formulas)
+
+Demonstrates complex formula support:
+- Division: `(calorie_deficit / 7700) * 7 * compliance`
+- Multiplication of multiple variables
+- Addition and subtraction
+- Nested operations
+- Real-world body composition modeling
+
+```bash
+python examples/demo_weight_loss.py
+```
+
+**Output:**
+```
+Week     Weight   Change      Fat   Muscle    Fat%
+----------------------------------------------------------------------
+Start    92.47kg        -   18.55kg   70.16kg   20.1%
+1        88.53kg   -3.94kg   18.24kg   70.29kg   20.6%
+2        88.35kg   -0.18kg   17.93kg   70.41kg   20.3%
+...
+8        87.26kg   -0.18kg   16.08kg   71.18kg   18.4%
+
+Results: -5.21kg weight, -2.47kg fat, +1.02kg muscle, body fat: 20.1% → 18.4%
 ```
 
 ## Testing
