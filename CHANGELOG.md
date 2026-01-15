@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2025-01-15
+
+### Fixed
+- **Persistence Storage Location**: Changed default storage from `.simulations` to `~/.mcp-scenario-engine/simulations/` to fix `OSError: Read-only file system` when running in Claude Desktop or other read-only contexts
+- **History Restoration**: Event history is now correctly restored when loading simulations. Previously, history was serialized but not deserialized, resulting in loaded simulations having only 1 creation event instead of the full audit trail
+  - Preserves all event IDs, timestamps, and state deltas
+  - Complete audit trail now survives save/load cycles
+
 ## [1.0.0] - 2025-01-15
 
 ### Added
