@@ -2,9 +2,9 @@
 
 **An MCP Server for Deterministic Simulation and Scenario Planning**
 
-[![Tests](https://img.shields.io/badge/tests-passing-brightgreen)]()
-[![Coverage](https://img.shields.io/badge/coverage-80%25%2B-brightgreen)]()
-[![Python](https://img.shields.io/badge/python-3.11%2B-blue)]()
+[![CI](https://github.com/YOUR_USERNAME/mcp-scenario-engine/workflows/CI/badge.svg)](https://github.com/YOUR_USERNAME/mcp-scenario-engine/actions)
+[![Python](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ## Overview
 
