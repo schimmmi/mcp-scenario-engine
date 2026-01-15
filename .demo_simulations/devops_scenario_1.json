@@ -1,0 +1,92 @@
+{
+  "name": "devops_scenario_1",
+  "description": "High CPU scenario - continued",
+  "state": {
+    "schema_version": "v1",
+    "simulation_id": "1320c9d1-dbf2-4f5a-af39-7613ed4d696d",
+    "created_at": "2026-01-15T16:54:15.645821Z",
+    "updated_at": "2026-01-15T16:54:15.747316Z",
+    "seed": 42,
+    "time": 4,
+    "entities": {},
+    "metrics": {
+      "error_rate": 0.21000000000000002
+    },
+    "resources": {
+      "cpu": 85.0,
+      "servers": 3.0
+    },
+    "flags": {
+      "burnout": false
+    },
+    "metadata": {}
+  },
+  "rules": [
+    {
+      "rule_id": "cpu_overload",
+      "condition": {
+        "type": "comparison",
+        "left": {
+          "type": "resource",
+          "name": "cpu"
+        },
+        "operator": ">",
+        "right": {
+          "type": "value",
+          "value": 80
+        }
+      },
+      "actions": [
+        {
+          "type": "set_metric",
+          "metric": "error_rate",
+          "value": {
+            "type": "increment",
+            "amount": 0.05
+          }
+        }
+      ],
+      "priority": 0,
+      "description": "High CPU increases error rate"
+    }
+  ],
+  "constraints": [],
+  "history": [
+    {
+      "event_id": "4e6a6a70-9559-4133-9e2f-878844943fd5",
+      "timestamp": "2026-01-15T16:54:15.727094Z",
+      "event_type": "simulation_created",
+      "action_name": null,
+      "params": {},
+      "state_delta": {},
+      "constraints_checked": [],
+      "constraints_violated": [],
+      "reason": "Simulation created with seed 42"
+    },
+    {
+      "event_id": "d5ec1dfa-ae65-42b9-a2b0-8a66a10e7eff",
+      "timestamp": "2026-01-15T16:54:15.757484Z",
+      "event_type": "action_applied",
+      "action_name": "step",
+      "params": {},
+      "state_delta": {
+        "time": {
+          "before": 3,
+          "after": 4
+        },
+        "metrics": {
+          "before": {
+            "error_rate": 0.16000000000000003
+          },
+          "after": {
+            "error_rate": 0.21000000000000002
+          }
+        }
+      },
+      "constraints_checked": [],
+      "constraints_violated": [],
+      "reason": "Advanced simulation time from 3 to 4 | World rules applied: cpu_overload"
+    }
+  ],
+  "seed": 42
+}

@@ -1,0 +1,53 @@
+[project]
+name = "mcp-scenario-engine"
+version = "0.1.0"
+description = "MCP Server for deterministic simulation and scenario planning"
+authors = [{name = "MCP Scenario Engine", email = "info@example.com"}]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=1.0.0",
+    "pydantic>=2.0.0",
+    "structlog>=24.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.23.0",
+    "ruff>=0.3.0",
+    "black>=24.0.0",
+    "mypy>=1.8.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "ANN", "B", "A", "C4", "DTZ", "T10", "ICN", "PIE", "PT", "RET", "SIM", "ARG", "PTH", "PD", "PLE", "PLR", "PLW", "TRY", "RUF"]
+ignore = ["ANN101", "ANN102", "PLR0913", "TRY003"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "--cov=src --cov-report=html --cov-report=term-missing --cov-fail-under=80"
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["tests/*", "**/__pycache__/*", "src/mcp_scenario_engine/server.py"]

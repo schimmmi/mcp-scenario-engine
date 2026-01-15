@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  mcp-scenario-engine:
+    build: .
+    container_name: mcp-scenario-engine
+    stdin_open: true
+    tty: true
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./examples:/app/examples:ro
+    command: python -m mcp_scenario_engine.server
+
+  demo:
+    build: .
+    container_name: mcp-scenario-demo
+    command: sh -c "python examples/demo_scenario_a.py && echo '\n---\n' && python examples/demo_scenario_b.py"
+    profiles:
+      - demo
