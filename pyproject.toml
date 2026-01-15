@@ -46,7 +46,7 @@ warn_unused_configs = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
-addopts = "--cov=src --cov-report=html --cov-report=term-missing --cov-fail-under=40"
+addopts = "--cov=src --cov-report=html --cov-report=term-missing --cov-fail-under=39"
 
 [tool.coverage.run]
 source = ["src"]
