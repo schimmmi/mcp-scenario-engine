@@ -1,6 +1,7 @@
 """Persistence layer for simulations."""
 
 import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -12,10 +13,15 @@ from .simulation import SimulationEngine
 class SimulationPersistence:
     """Handles saving and loading simulations to/from disk."""
 
-    def __init__(self, storage_dir: str | Path = ".simulations"):
+    def __init__(self, storage_dir: str | Path | None = None):
         """Initialize persistence layer."""
+        if storage_dir is None:
+            # Use user's home directory for writable storage
+            home = Path.home()
+            storage_dir = home / ".mcp-scenario-engine" / "simulations"
+
         self.storage_dir = Path(storage_dir)
-        self.storage_dir.mkdir(exist_ok=True)
+        self.storage_dir.mkdir(parents=True, exist_ok=True)
 
     def save_simulation(
         self, name: str, engine: SimulationEngine, description: str = ""

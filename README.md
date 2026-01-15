@@ -77,6 +77,7 @@ The MCP Scenario Engine is a Model Context Protocol (MCP) server that provides a
 - Set checkpoints and resume
 - CRUD operations (Save, Load, List, Delete)
 - Metadata inspection without loading
+- Storage in `~/.mcp-scenario-engine/simulations/`
 
 ## Installation
 

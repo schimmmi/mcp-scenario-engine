@@ -12,7 +12,9 @@ def main() -> None:
     print("💾 Persistence Demo - Save & Load Simulations")
     print("=" * 70)
 
+    # Use a temporary directory for demo
     persistence = SimulationPersistence(storage_dir=".demo_simulations")
+    print(f"\n📁 Storage directory: {persistence.storage_dir.absolute()}")
 
     # === Create Simulation 1 ===
     print("\n📝 Creating DevOps Simulation...")
