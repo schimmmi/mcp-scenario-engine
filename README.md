@@ -112,16 +112,73 @@ pip install -e ".[dev]"
 
 ### Docker
 
+#### Build and Run Demos
+
 ```bash
-# Build
+# Build Docker image
 docker compose build
 
-# Run demo
+# Run all demo scenarios
 docker compose --profile demo run demo
 
-# Start MCP server
-docker compose up mcp-scenario-engine
+# Run specific demo
+docker compose run demo python examples/demo_scenario_a.py
+docker compose run demo python examples/demo_weight_loss.py
+docker compose run demo python examples/demo_prisoners_dilemma.py
 ```
+
+#### Start MCP Server
+
+**Option 1: Standalone Server**
+```bash
+# Start server in background
+docker compose up -d mcp-scenario-engine
+
+# View logs
+docker compose logs -f mcp-scenario-engine
+
+# Stop server
+docker compose down
+```
+
+**Option 2: Use with Claude Desktop**
+
+Add to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "scenario-engine": {
+      "command": "docker",
+      "args": [
+        "compose",
+        "-f",
+        "/path/to/mcp-scenario-engine/docker-compose.yml",
+        "run",
+        "--rm",
+        "mcp-scenario-engine"
+      ]
+    }
+  }
+}
+```
+
+**Important Notes:**
+- Replace `/path/to/mcp-scenario-engine` with actual path
+- Docker must be running before starting Claude Desktop
+- Simulations are saved inside the container (mount a volume to persist)
+
+**Mount Volume for Persistence:**
+
+```yaml
+# Add to docker-compose.yml under mcp-scenario-engine service:
+volumes:
+  - ~/.mcp-scenario-engine:/root/.mcp-scenario-engine
+```
+
+This saves simulations to your home directory instead of the container.
+
+**📖 For complete Docker documentation, see [DOCKER.md](DOCKER.md)**
 
 ## Quick Start
 
