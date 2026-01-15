@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-01-15
+
+### Added
+- **Complex Formula Support in DynamicRules**: World rules now support advanced mathematical operations
+  - **Division**: `{"type": "divide", "numerator": ..., "denominator": ...}` with zero-division protection
+  - **Multiplication of multiple variables**: `{"type": "multiply", "values": [a, b, c, ...]}` for any number of factors
+  - **Addition of multiple values**: `{"type": "add", "values": [a, b, c, ...]}` for summing multiple terms
+  - **Subtraction**: `{"type": "subtract", "left": a, "right": b}` for difference calculations
+  - **Nested formulas**: Arbitrary nesting of operations for complex calculations like `((a / b) * c * d)`
+  - **State references in formulas**: Access resources, metrics, and time values within calculations
+
+- **Weight Loss Simulation Demo**: New `examples/demo_weight_loss.py` demonstrating real-world complex formulas
+  - Body composition modeling with fat loss and muscle gain
+  - Realistic calorie deficit calculations: `(deficit / 7700) * 7 * compliance`
+  - Training-based muscle growth: `training_sessions * 0.05 * compliance`
+  - 8-week simulation with detailed progress tracking
+
+### Enhanced
+- **Formula computation engine**: Complete rewrite of `_compute_value()` method to support recursive formula evaluation
+- **Documentation**: Updated README with formula syntax examples and new demo scenario
+
+### Use Cases Enabled
+- Health and fitness tracking simulations
+- Economic models with complex calculations
+- Resource optimization with mathematical constraints
+- Scientific simulations requiring formulas
+- Any domain requiring multi-variable mathematical operations
+
 ## [1.0.1] - 2025-01-15
 
 ### Fixed
