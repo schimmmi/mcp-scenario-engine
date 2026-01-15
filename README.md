@@ -8,13 +8,19 @@
 
 ## Overview
 
-The MCP Scenario Engine is a Model Context Protocol (MCP) server that provides a simulation space where AI agents can query system states, execute actions, and simulate impacts in a traceable manner. Ideal for:
+The MCP Scenario Engine is a Model Context Protocol (MCP) server that provides a simulation space where AI agents can query system states, execute actions, and simulate impacts in a traceable manner.
 
-- 🎯 Project planning and simulation
-- 🏗️ Infrastructure change planning
-- 🔬 "What-If" analyses
-- 📊 Deterministic decision-making
-- 🌳 Timeline forking for alternative scenarios
+**With complex formula support**, you can now model sophisticated systems including game theory, economics, health tracking, and scientific simulations—all through JSON-defined rules.
+
+### Use Cases
+
+- 🎯 **Project Planning**: Resource allocation, timeline simulation
+- 🏗️ **Infrastructure**: Capacity planning, load testing
+- 🔬 **Scientific Modeling**: Physics, chemistry, biology simulations
+- 📊 **Economics & Finance**: Market dynamics, auctions, investments
+- 🎮 **Game Theory**: Strategic interactions, Nash equilibrium, evolutionary dynamics
+- 🏋️ **Health & Fitness**: Body composition, nutrition, training optimization
+- 🌳 **What-If Analysis**: Timeline forking for alternative scenarios
 
 ## Core Features
 
@@ -496,6 +502,81 @@ Start    92.47kg        -   18.55kg   70.16kg   20.1%
 8        87.26kg   -0.18kg   16.08kg   71.18kg   18.4%
 
 Results: -5.21kg weight, -2.47kg fat, +1.02kg muscle, body fat: 20.1% → 18.4%
+```
+
+### Demo: Game Theory Simulations
+
+Demonstrates game-theoretic models with complex strategic interactions:
+
+#### Prisoner's Dilemma (Iterated Game)
+```bash
+python examples/demo_prisoners_dilemma.py
+```
+
+**Features:**
+- Iterated prisoner's dilemma with payoff matrices
+- Tit-for-Tat vs Tit-for-Tat (mutual cooperation)
+- Tit-for-Tat vs Always Defect (retaliation)
+- Strategic formulas calculating payoffs from action combinations
+
+**Output:**
+```
+Round   P1 Move    P2 Move    P1 Score     P2 Score
+----------------------------------------------------------------------
+1       Cooperate  Cooperate  3            3
+...
+10      Cooperate  Cooperate  30           30
+
+Tit-for-Tat vs Always Defect:
+1       Cooperate  Defect     0            5
+2       Defect     Defect     1            6
+...
+```
+
+#### Evolutionary Game Theory (Hawk-Dove)
+```bash
+python examples/demo_evolutionary_game.py
+```
+
+**Features:**
+- Population dynamics with Hawks and Doves
+- Frequency-dependent fitness calculations
+- Replicator dynamics: `hawks_new = hawks * (hawk_fitness / avg_fitness)`
+- Evolutionary Stable Strategy (ESS) emergence
+- Complex nested formulas for payoffs
+
+**Output:**
+```
+Gen     Hawks   Doves    H_Fit    D_Fit  Avg_Fit
+----------------------------------------------------------------------
+1        50.0    50.0     12.5     12.5     12.5
+...
+20       50.0    50.0     12.5     12.5     12.5
+
+Equilibrium: 50% Hawks (matches theoretical ESS!)
+```
+
+#### Auction Theory (Vickrey Second-Price)
+```bash
+python examples/demo_auction_theory.py
+```
+
+**Features:**
+- Sealed-bid second-price auction
+- Truth-telling incentive demonstration
+- Winner's surplus calculation: `valuation - payment`
+- Dominant strategy analysis
+- Compares truthful vs strategic bidding
+
+**Output:**
+```
+Winner: Bidder 3
+Payment: $95.00 (second-highest bid)
+Winner's Surplus: $25.00
+
+Truth-telling test:
+• Underbidding → Lost auction, $25 regret
+• Overbidding → Same surplus ($25), no benefit
 ```
 
 ## Testing
