@@ -125,8 +125,15 @@ class SimulationPersistence:
                 )
                 engine.world_rule_engine.add_rule(rule)
 
+        # Restore history
+        from .models import HistoryEvent
+
+        engine.history.clear()  # Remove the auto-generated creation event
+        for event_data in save_data.get("history", []):
+            event = HistoryEvent(**event_data)
+            engine.history.append(event)
+
         # Note: Constraints are not restored (would need constraint registry)
-        # History is embedded in state, but we could restore it if needed
 
         return engine
 

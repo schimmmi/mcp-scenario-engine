@@ -1,0 +1,90 @@
+{
+  "name": "test",
+  "description": "",
+  "state": {
+    "schema_version": "v1",
+    "simulation_id": "7968f930-f008-489d-a061-d397d5054e67",
+    "created_at": "2026-01-15T17:54:21.944704Z",
+    "updated_at": "2026-01-15T17:54:21.945697Z",
+    "seed": 42,
+    "time": 2,
+    "entities": {},
+    "metrics": {},
+    "resources": {
+      "energy": 90.0
+    },
+    "flags": {},
+    "metadata": {}
+  },
+  "rules": [],
+  "constraints": [],
+  "history": [
+    {
+      "event_id": "44813d68-c44a-4850-afe3-c0e47055b47f",
+      "timestamp": "2026-01-15T17:54:21.945310Z",
+      "event_type": "simulation_created",
+      "action_name": null,
+      "params": {},
+      "state_delta": {},
+      "constraints_checked": [],
+      "constraints_violated": [],
+      "reason": "Simulation created with seed 42"
+    },
+    {
+      "event_id": "78ad6481-24a7-49e3-905a-70fe73a6b8ca",
+      "timestamp": "2026-01-15T17:54:21.945529Z",
+      "event_type": "action_applied",
+      "action_name": "step",
+      "params": {},
+      "state_delta": {
+        "time": {
+          "before": 0,
+          "after": 1
+        }
+      },
+      "constraints_checked": [],
+      "constraints_violated": [],
+      "reason": "Advanced simulation time from 0 to 1"
+    },
+    {
+      "event_id": "3567ae04-96c1-4b0a-80b1-fcba25c94bc0",
+      "timestamp": "2026-01-15T17:54:21.945634Z",
+      "event_type": "action_applied",
+      "action_name": "adjust_resource",
+      "params": {
+        "resource": "energy",
+        "delta": -10.0
+      },
+      "state_delta": {
+        "resources": {
+          "before": {
+            "energy": 100.0
+          },
+          "after": {
+            "energy": 90.0
+          }
+        }
+      },
+      "constraints_checked": [],
+      "constraints_violated": [],
+      "reason": "Adjusted resource 'energy' by -10.0 (from 100.0 to 90.0)"
+    },
+    {
+      "event_id": "58c87da0-d5af-431d-84e8-a8fb351b4d95",
+      "timestamp": "2026-01-15T17:54:21.945711Z",
+      "event_type": "action_applied",
+      "action_name": "step",
+      "params": {},
+      "state_delta": {
+        "time": {
+          "before": 1,
+          "after": 2
+        }
+      },
+      "constraints_checked": [],
+      "constraints_violated": [],
+      "reason": "Advanced simulation time from 1 to 2"
+    }
+  ],
+  "seed": 42
+}
