@@ -1,100 +1,100 @@
 # MCP Scenario Engine
 
-**Ein MCP-Server für deterministische Simulation und Szenario-Planung**
+**An MCP Server for Deterministic Simulation and Scenario Planning**
 
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)]()
 [![Coverage](https://img.shields.io/badge/coverage-80%25%2B-brightgreen)]()
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue)]()
 
-## Überblick
+## Overview
 
-Der MCP Scenario Engine ist ein Model Context Protocol (MCP) Server, der einen Simulationsraum bereitstellt, in dem KI-Agents Systemzustände abfragen, Aktionen ausführen und Auswirkungen nachvollziehbar simulieren können. Ideal für:
+The MCP Scenario Engine is a Model Context Protocol (MCP) server that provides a simulation space where AI agents can query system states, execute actions, and simulate impacts in a traceable manner. Ideal for:
 
-- 🎯 Projektplanung und -simulation
-- 🏗️ Infrastruktur-Änderungsplanung
-- 🔬 "What-If"-Analysen
-- 📊 Deterministische Entscheidungsfindung
-- 🌳 Timeline-Forking für alternative Szenarien
+- 🎯 Project planning and simulation
+- 🏗️ Infrastructure change planning
+- 🔬 "What-If" analyses
+- 📊 Deterministic decision-making
+- 🌳 Timeline forking for alternative scenarios
 
-## Kernfeatures
+## Core Features
 
 ### ✅ State Management
-- Versioniertes State-Schema (JSON Schema)
-- Vollständige State-Snapshots
-- Slicing und partielle Abfragen
-- Time-stepped Simulation
+- Versioned state schema (JSON Schema)
+- Complete state snapshots
+- Slicing and partial queries
+- Time-stepped simulation
 
 ### ✅ Action System
-8 implementierte Actions:
-- `step` - Zeit vorwärts bewegen
-- `set_resource` - Ressource setzen
-- `adjust_resource` - Ressource anpassen
-- `set_metric` - Metrik setzen
-- `set_flag` - Boolean-Flag setzen
-- `add_entity` - Entity hinzufügen/updaten
-- `remove_entity` - Entity entfernen
-- `simulate_load` - Load-Szenario simulieren (mit Zufall)
+8 implemented actions:
+- `step` - Advance time forward
+- `set_resource` - Set resource value
+- `adjust_resource` - Adjust resource by delta
+- `set_metric` - Set metric value
+- `set_flag` - Set boolean flag
+- `add_entity` - Add/update entity
+- `remove_entity` - Remove entity
+- `simulate_load` - Simulate load scenario (with randomness)
 
 ### ✅ World Rules (Dynamic)
-- JSON-definierte Regeln über MCP
-- Automatische Anwendung bei `step` Actions
-- Beliebige Conditions (comparison, and, or, not, always)
-- Value Sources (resource, metric, flag, metadata, time, value)
-- Vielfältige Actions (set_resource, set_metric, set_flag, set_metadata)
-- Value Operations (fixed, increment, multiply)
-- Prioritätssystem für Regel-Reihenfolge
-- Vollständiges Rule Management (CRUD)
+- JSON-defined rules via MCP
+- Automatic application on `step` actions
+- Flexible conditions (comparison, and, or, not, always)
+- Value sources (resource, metric, flag, metadata, time, value)
+- Multiple action types (set_resource, set_metric, set_flag, set_metadata)
+- Value operations (fixed, increment, multiply)
+- Priority system for rule execution order
+- Full rule management (CRUD operations)
 
 ### ✅ Constraint Engine
-- Serverseitige Validierung
-- Automatisches State-Rollback bei Verstößen
-- 3+ vordefinierte Constraints:
+- Server-side validation
+- Automatic state rollback on violations
+- 3+ predefined constraints:
   - `NonNegativeResourceConstraint`
   - `MaxResourceConstraint`
   - `TimeMonotonicConstraint`
-- Klare Fehlermeldungen mit Kontext
+- Clear error messages with context
 
-### ✅ Determinismus & Reproduzierbarkeit
-- Seed-basierte Zufallsgenerierung
-- Gleicher Seed → Gleiche Ergebnisse
-- Vollständig reproduzierbare Simulationen
+### ✅ Determinism & Reproducibility
+- Seed-based random number generation
+- Same seed → Same results
+- Fully reproducible simulations
 
 ### ✅ Audit & Explainability
-- Vollständige Event-History
-- State-Deltas für jede Änderung
-- Constraint-Checks protokolliert
-- Structured Logging (JSON)
+- Complete event history
+- State deltas for every change
+- Constraint checks logged
+- Structured logging (JSON)
 
 ### ✅ Timeline Forking
-- Verzweigung von Simulationen
-- Parallele "What-If"-Szenarien
-- Unveränderliche Original-Timeline
+- Branch simulations
+- Parallel "what-if" scenarios
+- Immutable original timeline
 
 ### ✅ Persistence
-- Speichern von State + Rules + History
-- Multiple Simulationen verwalten
-- Server-Neustart überstehen
-- Checkpoints setzen und fortsetzen
-- CRUD-Operationen (Save, Load, List, Delete)
-- Metadata-Inspektion ohne Laden
+- Save state + rules + history
+- Manage multiple simulations
+- Survive server restarts
+- Set checkpoints and resume
+- CRUD operations (Save, Load, List, Delete)
+- Metadata inspection without loading
 
 ## Installation
 
-### Voraussetzungen
+### Prerequisites
 - Python 3.11+
-- pip oder uv
+- pip or uv
 
-### Lokale Installation
+### Local Installation
 
 ```bash
-# Repository klonen
-git clone <repository-url>
+# Clone repository
+git clone https://github.com/schimmmi/mcp-scenario-engine.git
 cd mcp-scenario-engine
 
-# Abhängigkeiten installieren
+# Install dependencies
 make install
 
-# Oder manuell
+# Or manually
 pip install -e ".[dev]"
 ```
 
@@ -104,65 +104,65 @@ pip install -e ".[dev]"
 # Build
 docker compose build
 
-# Demo ausführen
+# Run demo
 docker compose --profile demo run demo
 
-# MCP Server starten
+# Start MCP server
 docker compose up mcp-scenario-engine
 ```
 
-## Schnellstart
+## Quick Start
 
-### 1. Demo ausführen
+### 1. Run Demo
 
 ```bash
-# Beide Demo-Szenarien
+# Both demo scenarios
 make demo
 
-# Oder einzeln
+# Or individually
 python examples/demo_scenario_a.py
 python examples/demo_scenario_b.py
 ```
 
-### 2. Als Python-Library verwenden
+### 2. Use as Python Library
 
 ```python
 from mcp_scenario_engine import SimulationEngine
 from mcp_scenario_engine.constraints import NonNegativeResourceConstraint
 
-# Simulation erstellen
+# Create simulation
 sim = SimulationEngine(seed=42)
 
-# Initial State setzen
+# Set initial state
 sim.state.resources = {"budget": 10000.0, "capacity": 100.0}
 
-# Constraint hinzufügen
+# Add constraint
 sim.constraint_engine.add_constraint(
     NonNegativeResourceConstraint("budget")
 )
 
-# Aktionen ausführen
+# Execute actions
 result = sim.apply_action(
     "adjust_resource",
     {"resource": "budget", "delta": -2000.0}
 )
 
 if result.success:
-    print(f"Neuer Budget: {sim.state.resources['budget']}")
+    print(f"New budget: {sim.state.resources['budget']}")
     print(f"Delta: {result.delta}")
 else:
-    print(f"Fehler: {result.message}")
+    print(f"Error: {result.message}")
     for v in result.constraints_violated:
         print(f"  - {v.constraint_id}: {v.message}")
 ```
 
-### 3. Als MCP Server verwenden
+### 3. Use as MCP Server
 
 ```bash
-# Server starten
+# Start server
 python -m mcp_scenario_engine.server
 
-# In Claude Desktop konfigurieren (claude_desktop_config.json):
+# Configure in Claude Desktop (claude_desktop_config.json):
 {
   "mcpServers": {
     "scenario-engine": {
@@ -176,19 +176,19 @@ python -m mcp_scenario_engine.server
 
 ## MCP Tools
 
-Der Server stellt 16 Tools bereit:
+The server provides 16 tools:
 
 ### State Management
 
 #### `get_state`
-Aktuellen Simulationszustand abrufen.
+Get current simulation state.
 
 ```json
 {}
 ```
 
 #### `get_schema`
-State-Schema abrufen.
+Get state schema definition.
 
 ```json
 {}
@@ -197,7 +197,7 @@ State-Schema abrufen.
 ### Action Execution
 
 #### `apply_action`
-Aktion ausführen.
+Execute an action.
 
 ```json
 {
@@ -212,7 +212,7 @@ Aktion ausführen.
 ### Simulation Control
 
 #### `reset_simulation`
-Simulation zurücksetzen.
+Reset simulation to initial state.
 
 ```json
 {
@@ -221,14 +221,14 @@ Simulation zurücksetzen.
 ```
 
 #### `fork_timeline`
-Timeline verzweigen für "What-If"-Szenarien.
+Fork timeline for "what-if" scenarios.
 
 ```json
 {}
 ```
 
 #### `get_history`
-Event-History abrufen.
+Get event history.
 
 ```json
 {
@@ -239,7 +239,7 @@ Event-History abrufen.
 ### World Rules (Dynamic)
 
 #### `add_world_rule`
-Dynamische Regel hinzufügen, die automatisch bei `step` angewendet wird.
+Add dynamic rule that automatically applies on `step` actions.
 
 ```json
 {
@@ -256,19 +256,19 @@ Dynamische Regel hinzufügen, die automatisch bei `step` angewendet wird.
     "value": {"type": "increment", "amount": 0.05}
   }],
   "priority": 10,
-  "description": "Erhöhe Error-Rate bei CPU-Überlast"
+  "description": "Increase error rate on CPU overload"
 }
 ```
 
 #### `list_world_rules`
-Alle aktiven Regeln auflisten.
+List all active rules.
 
 ```json
 {}
 ```
 
 #### `get_world_rule`
-Details einer spezifischen Regel abrufen.
+Get details of a specific rule.
 
 ```json
 {
@@ -277,7 +277,7 @@ Details einer spezifischen Regel abrufen.
 ```
 
 #### `update_world_rule`
-Bestehende Regel aktualisieren (partiell).
+Update existing rule (partial update).
 
 ```json
 {
@@ -288,7 +288,7 @@ Bestehende Regel aktualisieren (partiell).
 ```
 
 #### `remove_world_rule`
-Regel entfernen.
+Remove a rule.
 
 ```json
 {
@@ -297,7 +297,7 @@ Regel entfernen.
 ```
 
 #### `clear_world_rules`
-Alle Regeln entfernen.
+Remove all rules.
 
 ```json
 {}
@@ -306,7 +306,7 @@ Alle Regeln entfernen.
 ### Persistence
 
 #### `save_simulation`
-Simulation persistent speichern (State + Rules + History).
+Save simulation persistently (State + Rules + History).
 
 ```json
 {
@@ -316,7 +316,7 @@ Simulation persistent speichern (State + Rules + History).
 ```
 
 #### `load_simulation`
-Gespeicherte Simulation laden (ersetzt aktuelle Simulation).
+Load saved simulation (replaces current simulation).
 
 ```json
 {
@@ -325,14 +325,14 @@ Gespeicherte Simulation laden (ersetzt aktuelle Simulation).
 ```
 
 #### `list_simulations`
-Alle gespeicherten Simulationen auflisten.
+List all saved simulations.
 
 ```json
 {}
 ```
 
 #### `get_simulation_info`
-Metadata einer Simulation abrufen ohne sie zu laden.
+Get simulation metadata without loading it.
 
 ```json
 {
@@ -341,7 +341,7 @@ Metadata einer Simulation abrufen ohne sie zu laden.
 ```
 
 #### `delete_simulation`
-Gespeicherte Simulation löschen.
+Delete a saved simulation.
 
 ```json
 {
@@ -367,23 +367,23 @@ Gespeicherte Simulation löschen.
 }
 ```
 
-## Demo-Szenarien
+## Demo Scenarios
 
-### Szenario A: Normaler Simulationslauf
+### Scenario A: Normal Simulation Run
 
-Demonstriert:
-- State-Initialisierung
-- Mehrere Action-Typen
-- Resource Management
-- Entity-Lifecycle
-- Metrics Tracking
-- Reproduzierbarkeit
+Demonstrates:
+- State initialization
+- Multiple action types
+- Resource management
+- Entity lifecycle
+- Metrics tracking
+- Reproducibility
 
 ```bash
 python examples/demo_scenario_a.py
 ```
 
-**Ausgabe:**
+**Output:**
 ```
 ============================================================
 DEMO SCENARIO A: Normal Simulation Run
@@ -402,20 +402,20 @@ DEMO SCENARIO A: Normal Simulation Run
    ✓ Reproducibility verified - identical results with same seed
 ```
 
-### Szenario B: Constraint-Verstoß
+### Scenario B: Constraint Violations
 
-Demonstriert:
-- Constraint-Validierung
-- State-Rollback bei Verstößen
-- Klare Fehlermeldungen
-- Event-History
-- Timeline-Forking
+Demonstrates:
+- Constraint validation
+- State rollback on violations
+- Clear error messages
+- Event history
+- Timeline forking
 
 ```bash
 python examples/demo_scenario_b.py
 ```
 
-**Ausgabe:**
+**Output:**
 ```
 ============================================================
 DEMO SCENARIO B: Constraint Violation Handling
@@ -432,10 +432,10 @@ DEMO SCENARIO B: Constraint Violation Handling
 
 ### Demo: World Rules (DevOps)
 
-Demonstriert dynamische Regeln:
-- JSON-basierte Regel-Definition
-- Automatische Kausalität
-- Deterministische Weltmodell-Simulation
+Demonstrates dynamic rules:
+- JSON-based rule definition
+- Automatic causality
+- Deterministic world model simulation
 
 ```bash
 python examples/demo_devops_world.py
@@ -443,17 +443,17 @@ python examples/demo_devops_world.py
 
 ### Demo: Persistence
 
-Demonstriert Persistenz-Features:
-- Save/Load von Simulationen
-- Multiple Simulation Management
-- Continue from Checkpoint
-- Delete und List Operations
+Demonstrates persistence features:
+- Save/load simulations
+- Multiple simulation management
+- Continue from checkpoint
+- Delete and list operations
 
 ```bash
 python examples/demo_persistence.py
 ```
 
-**Ausgabe:**
+**Output:**
 ```
 ✅ Persistence Demo Complete!
 
@@ -469,37 +469,37 @@ python examples/demo_persistence.py
 ## Testing
 
 ```bash
-# Alle Tests ausführen
+# Run all tests
 make test
 
-# Mit Coverage
+# With coverage
 pytest --cov=src --cov-report=html
 
-# Nur Unit-Tests
+# Unit tests only
 pytest tests/test_*.py -v
 
-# Nur Integration-Tests
+# Integration tests only
 pytest tests/test_integration.py -v
 ```
 
-**Test-Coverage:** 80%+ (Requirement erfüllt)
+**Test Coverage:** 80%+ (requirement met)
 
-## Entwicklung
+## Development
 
-### Code-Qualität
+### Code Quality
 
 ```bash
 # Linting
 make lint
 
-# Formatierung
+# Formatting
 make format
 
-# Type-Checking
+# Type checking
 mypy src
 ```
 
-### Struktur
+### Structure
 
 ```
 mcp-scenario-engine/
@@ -535,7 +535,7 @@ mcp-scenario-engine/
 
 ### Structured Logging
 
-Alle Logs werden als JSON ausgegeben:
+All logs are output as JSON:
 
 ```json
 {
@@ -549,55 +549,57 @@ Alle Logs werden als JSON ausgegeben:
 
 ### Event Types
 
-- `simulation_created` - Simulation erstellt
-- `simulation_reset` - Simulation zurückgesetzt
-- `action_applied` - Aktion erfolgreich
-- `constraint_violated` - Constraint-Verstoß
-- `timeline_forked` - Timeline verzweigt
+- `simulation_created` - Simulation created
+- `simulation_reset` - Simulation reset
+- `action_applied` - Action successful
+- `constraint_violated` - Constraint violation
+- `timeline_forked` - Timeline forked
 
-## Akzeptanzkriterien
+## Acceptance Criteria
 
-✅ **State lesen**: `get_state` liefert valides Schema
-✅ **Action ausführen**: `apply_action` liefert before/after/delta/event_id
-✅ **Constraint greift**: Violations verhindern State-Änderung
-✅ **Determinismus**: Gleicher Seed → Gleiche Ergebnisse
-✅ **Fork/Branch**: Unveränderliches Original, divergierende Fork
+✅ **Read state**: `get_state` returns valid schema
+✅ **Execute action**: `apply_action` returns before/after/delta/event_id
+✅ **Constraint enforcement**: Violations prevent state changes
+✅ **Determinism**: Same seed → Same results
+✅ **Fork/Branch**: Immutable original, diverging fork
 
 ## Definition of Done
 
-### Implementierung ✅
-- MCP-Server lauffähig (Docker + venv)
-- State-Schema v1 dokumentiert
-- 8 Actions implementiert
-- Constraint-Engine mit 3+ Regeln
-- Determinismus über Seed
+### Implementation ✅
+- MCP server operational (Docker + venv)
+- State schema v1 documented
+- 8 actions implemented
+- Constraint engine with 3+ rules
+- Determinism via seed
 
-### Qualität ✅
-- Unit-Tests (80%+ Coverage)
-- Integration-Tests (End-to-End)
+### Quality ✅
+- Unit tests (80%+ coverage)
+- Integration tests (end-to-end)
 - Linting/Formatting (ruff/black)
-- Type-Checking (mypy)
+- Type checking (mypy)
 
 ### Observability ✅
-- Structured Logging (JSON)
-- Keine Secrets im Log
-- Klare Error-Messages
+- Structured logging (JSON)
+- No secrets in logs
+- Clear error messages
 
-### Dokumentation ✅
-- README mit Setup & Beispielen
-- Tool-Liste & Schema
-- 2 Demo-Szenarien
-- Beispiel-Outputs
+### Documentation ✅
+- README with setup & examples
+- Tool list & schema
+- 4 demo scenarios
+- Example outputs
 
 ### Demo ✅
-- `make demo` funktioniert
-- Szenario A: Normaler Lauf
-- Szenario B: Constraint-Handling
+- `make demo` works
+- Scenario A: Normal run
+- Scenario B: Constraint handling
+- Demo: World rules
+- Demo: Persistence
 
-## Lizenz
+## License
 
 MIT
 
-## Kontakt
+## Contact
 
-Bei Fragen oder Problemen, bitte ein Issue öffnen.
+For questions or issues, please open an issue on GitHub.
